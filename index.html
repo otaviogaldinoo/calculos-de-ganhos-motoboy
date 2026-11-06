@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Meus ganhos</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eceae4;
+      --card: #fff;
+      --ink: #1c1f24;
+      --mute: #6b7078;
+      --line: #d8d5cc;
+      --amber: #f2a900;
+      --amberink: #1c1f24;
+      --pos: #18794e;
+      --neg: #b3392b;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      color-scheme: light
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #15181c;
+        --card: #1f2328;
+        --ink: #f1efe8;
+        --mute: #9aa0a8;
+        --line: #323840;
+        --pos: #4cc58a;
+        --neg: #ff7b6b;
+        color-scheme: dark
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #15181c;
+      --card: #1f2328;
+      --ink: #f1efe8;
+      --mute: #9aa0a8;
+      --line: #323840;
+      --pos: #4cc58a;
+      --neg: #ff7b6b;
+      color-scheme: dark
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 500 16px/1.4 Barlow, system-ui, sans-serif
+    }
+
+    main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px 16px 48px
+    }
+
+    h1,
+    h2,
+    .num {
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      font-weight: 700;
+      margin: 0
+    }
+
+    h1 {
+      font-size: 28px
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 14px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      color: var(--mute)
+    }
+
+    input {
+      width: 100%;
+      margin-top: 4px;
+      padding: 12px;
+      font: 600 20px Barlow, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 10px
+    }
+
+    input:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 1px
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    .res {
+      margin-top: 14px;
+      border-top: 1px dashed var(--line);
+      padding-top: 12px
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 4px 0
+    }
+
+    .row .num {
+      font-size: 22px
+    }
+
+    .neg {
+      color: var(--neg)
+    }
+
+    .big {
+      background: var(--amber);
+      color: var(--amberink);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline
+    }
+
+    .big .num {
+      font-size: 40px
+    }
+
+    .big span {
+      font-weight: 600
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px
+    }
+
+    .pair div {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 8px 12px
+    }
+
+    .pair small {
+      display: block;
+      color: var(--mute);
+      font-size: 13px
+    }
+
+    .pair .num {
+      font-size: 24px
+    }
+
+    button {
+      font: 600 18px Barlow, sans-serif;
+      border: 0;
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer
+    }
+
+    .save {
+      width: 100%;
+      margin-top: 14px;
+      background: var(--ink);
+      color: var(--bg)
+    }
+
+    .ghost {
+      background: none;
+      color: var(--mute);
+      padding: 6px 10px;
+      font-size: 15px
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 9px;
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--mute)
+    }
+
+    .tabs button[aria-pressed="true"] {
+      background: var(--amber);
+      color: var(--amberink)
+    }
+
+    .day {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding: 10px 0
+    }
+
+    .day small {
+      color: var(--mute);
+      display: block
+    }
+
+    .msg {
+      color: var(--mute);
+      margin: 8px 0 0;
+      font-size: 14px
+    }
+
+    textarea {
+      width: 100%;
+      margin-top: 10px;
+      min-height: 70px;
+      padding: 10px;
+      font: 14px/1.3 ui-monospace, monospace;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 10px
+    }
+
+    .bk {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px
+    }
+
+    .bk button {
+      flex: 1;
+      background: var(--bg);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      font-size: 16px;
+      padding: 10px
+    }
+
+    @media (min-width:900px) {
+      main {
+        max-width: 1060px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 20px;
+        align-items: start;
+        padding-top: 28px
+      }
+
+      h1 {
+        grid-column: 1/-1;
+        font-size: 36px
+      }
+
+      section:nth-of-type(1) {
+        grid-column: 1;
+        grid-row: 2/span 3
+      }
+
+      section:not(:nth-of-type(1)) {
+        grid-column: 2
+      }
+
+      .big .num {
+        font-size: 48px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Meus ganhos</h1>
+
+    <section aria-labelledby="t1">
+      <h2 id="t1">Fechar o período</h2>
+      <div class="grid">
+        <label class="full">Data<input id="data" type="date"></label>
+        <label>Horas trabalhadas<input id="horas" inputmode="decimal" placeholder="6,5 ou 6:30"></label>
+        <label>Km rodados<input id="km" inputmode="decimal" placeholder="0"></label>
+        <label>Ganho nos apps (R$)<input id="ganho" inputmode="decimal" placeholder="0,00"></label>
+        <label>Gasolina (R$)<input id="gas" inputmode="decimal" placeholder="0,00"></label>
+      </div>
+
+      <div class="res" id="res" aria-live="polite">
+        <div class="row"><span>Ganho bruto</span><span class="num" id="rBruto">R$ 0,00</span></div>
+        <div class="row"><span>Gasolina</span><span class="num neg" id="rGas">− R$ 0,00</span></div>
+        <div class="row"><span>Caixinha da moto</span><span class="num neg" id="rMan">− R$ 0,00</span></div>
+        <div class="big"><span>Lucro líquido</span><span class="num" id="rLiq">R$ 0,00</span></div>
+        <div class="pair">
+          <div><small>Hora bruta</small><span class="num" id="hBruta">–</span></div>
+          <div><small>Hora líquida</small><span class="num" id="hLiq">–</span></div>
+          <div><small>Líquido por km</small><span class="num" id="kmLiq">–</span></div>
+          <div><small>Bruto por km</small><span class="num" id="kmBruto">–</span></div>
+        </div>
+      </div>
+      <button class="save" id="salvar">Salvar dia</button>
+      <p class="msg" id="msg"></p>
+    </section>
+
+    <section aria-labelledby="t2">
+      <h2 id="t2">Resumo</h2>
+      <div class="tabs" role="group" aria-label="Período">
+        <button data-p="semana" aria-pressed="true">Semana</button>
+        <button data-p="mes" aria-pressed="false">Mês</button>
+        <button data-p="tudo" aria-pressed="false">Tudo</button>
+      </div>
+      <div class="row"><span>Dias trabalhados</span><span class="num" id="sDias">0</span></div>
+      <div class="row"><span>Ganho bruto</span><span class="num" id="sBruto">R$ 0,00</span></div>
+      <div class="row"><span>Lucro líquido</span><span class="num" id="sLiq">R$ 0,00</span></div>
+      <div class="row"><span>Hora líquida média</span><span class="num" id="sHora">–</span></div>
+      <div class="row"><span>Caixinha acumulada</span><span class="num" id="sMan">R$ 0,00</span></div>
+    </section>
+
+    <section aria-labelledby="t3">
+      <h2 id="t3">Histórico</h2>
+      <div id="lista">
+        <p class="msg">Nenhum dia salvo ainda. Preencha acima e toque em Salvar dia.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t4">
+      <h2 id="t4">Ajustes</h2>
+      <label>Reserva para manutenção (R$ por km)<input id="porKm" inputmode="decimal"></label>
+      <p class="msg">Esse valor vezes os km rodados é descontado todo dia e vai para a caixinha da moto.</p>
+      <h2 style="margin-top:18px">Backup</h2>
+      <p class="msg">Copie o backup e guarde em um lugar seguro. Para trocar de celular ou computador, cole o texto aqui
+        e toque em Restaurar.</p>
+      <textarea id="bkTxt" aria-label="Texto do backup" placeholder="O backup aparece aqui"></textarea>
+      <div class="bk"><button id="bkCopiar">Copiar backup</button><button id="bkRest">Restaurar</button></div>
+      <p class="msg" id="bkMsg"></p>
+    </section>
+  </main>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const brl = n => (n < 0 ? "− " : "") + "R$ " + Math.abs(n).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const num = s => { s = String(s || "").trim().replace(/\./g, "").replace(",", "."); const v = parseFloat(s); return isFinite(v) ? v : 0; };
+    const hrs = s => { s = String(s || "").trim(); if (s.includes(":")) { const [h, m] = s.split(":"); return (parseInt(h) || 0) + (parseInt(m) || 0) / 60; } return num(s.replace(".", ",")); };
+    const today = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10); };
+
+    let dias = [], porKm = 0.15, periodo = "semana";
+    const store = {
+      get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+      set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }
+    };
+
+    function calc() {
+      const h = hrs($("horas").value), km = num($("km").value), g = num($("ganho").value), gas = num($("gas").value);
+      const man = km * porKm, liq = g - gas - man;
+      $("rBruto").textContent = brl(g);
+      $("rGas").textContent = "− " + brl(gas);
+      $("rMan").textContent = "− " + brl(man);
+      $("rLiq").textContent = brl(liq);
+      $("hBruta").textContent = h > 0 ? brl(g / h) : "–";
+      $("hLiq").textContent = h > 0 ? brl(liq / h) : "–";
+      $("kmLiq").textContent = km > 0 ? brl(liq / km) : "–";
+      $("kmBruto").textContent = km > 0 ? brl(g / km) : "–";
+      return { h, km, g, gas, man, liq };
+    }
+
+    function inicioSemana() { const d = new Date(today() + "T12:00:00"); const w = (d.getDay() + 6) % 7; d.setDate(d.getDate() - w); return d.toISOString().slice(0, 10); }
+
+    function render() {
+      const ini = periodo === "semana" ? inicioSemana() : periodo === "mes" ? today().slice(0, 8) + "01" : "0000";
+      const sel = dias.filter(d => d.data >= ini);
+      const s = sel.reduce((a, d) => ({ g: a.g + d.g, liq: a.liq + d.liq, h: a.h + d.h, man: a.man + d.man }), { g: 0, liq: 0, h: 0, man: 0 });
+      $("sDias").textContent = sel.length;
+      $("sBruto").textContent = brl(s.g);
+      $("sLiq").textContent = brl(s.liq);
+      $("sHora").textContent = s.h > 0 ? brl(s.liq / s.h) : "–";
+      $("sMan").textContent = brl(s.man);
+
+      const box = $("lista");
+      if (!dias.length) { box.innerHTML = '<p class="msg">Nenhum dia salvo ainda. Preencha acima e toque em Salvar dia.</p>'; return; }
+      box.innerHTML = "";
+      [...dias].sort((a, b) => b.data.localeCompare(a.data)).forEach(d => {
+        const el = document.createElement("div");
+        el.className = "day";
+        const [y, m, dd] = d.data.split("-");
+        const info = document.createElement("div");
+        info.innerHTML = "<b></b><small></small>";
+        info.querySelector("b").textContent = dd + "/" + m + "/" + y + " – líquido " + brl(d.liq);
+        info.querySelector("small").textContent = d.h.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " h · " + d.km.toLocaleString("pt-BR") + " km · bruto " + brl(d.g) + (d.h > 0 ? " · " + brl(d.liq / d.h) + "/h" : "");
+        const b = document.createElement("button");
+        b.className = "ghost"; b.textContent = "Apagar";
+        b.onclick = () => { if (confirm("Apagar o dia " + dd + "/" + m + "?")) { dias = dias.filter(x => x.id !== d.id); store.set("dias", dias); render(); } };
+        el.append(info, b);
+        box.append(el);
+      });
+    }
+
+    $("salvar").onclick = () => {
+      const r = calc();
+      if (r.g <= 0 && r.h <= 0) { $("msg").textContent = "Preencha pelo menos as horas e o ganho."; return; }
+      const data = $("data").value || today();
+      dias = dias.filter(d => d.data !== data);
+      dias.push({ id: Date.now(), data, ...r });
+      store.set("dias", dias);
+      ["horas", "km", "ganho", "gas"].forEach(i => $(i).value = "");
+      $("data").value = today();
+      calc(); render();
+      $("msg").textContent = "Dia salvo. Se salvar outro para a mesma data, ele substitui o anterior.";
+    };
+
+    ["horas", "km", "ganho", "gas"].forEach(i => $(i).addEventListener("input", calc));
+    $("porKm").addEventListener("input", () => { porKm = num($("porKm").value); store.set("porKm", porKm); calc(); });
+    document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+      periodo = b.dataset.p;
+      document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-pressed", x === b));
+      render();
+    });
+
+    $("bkCopiar").onclick = async () => {
+      const t = JSON.stringify({ dias, porKm });
+      $("bkTxt").value = t; $("bkTxt").select();
+      try { await navigator.clipboard.writeText(t); $("bkMsg").textContent = "Backup copiado. Cole em um lugar seguro, como suas notas."; }
+      catch (e) { $("bkMsg").textContent = "Copie o texto da caixa acima e guarde."; }
+    };
+    $("bkRest").onclick = () => {
+      try {
+        const o = JSON.parse($("bkTxt").value);
+        const ok = (o.dias || []).filter(d => d && typeof d.data === "string" && isFinite(d.g) && isFinite(d.liq));
+        if (!ok.length) throw 0;
+        if (!confirm("Isso substitui os dias salvos aqui por " + ok.length + " dias do backup. Continuar?")) return;
+        dias = ok; store.set("dias", dias);
+        if (typeof o.porKm === "number") { porKm = o.porKm; store.set("porKm", porKm); $("porKm").value = String(porKm).replace(".", ","); }
+        calc(); render();
+        $("bkMsg").textContent = "Backup restaurado: " + ok.length + " dias.";
+      } catch (e) { $("bkMsg").textContent = "Backup inválido. Cole o texto completo que foi copiado."; }
+    };
+
+    dias = store.get("dias", []);
+    porKm = store.get("porKm", 0.15);
+    $("porKm").value = String(porKm).replace(".", ",");
+    $("data").value = today();
+    calc(); render();
+  </script>
+</body>
+
+</html>
